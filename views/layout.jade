@@ -1,0 +1,15 @@
+doctype
+html
+    head
+        title=title
+        script.
+            var BillyBuilder=!{jsConfig}
+        if favicon
+            link(rel="icon", href=favicon, type="image/x-icon")
+            link(rel="shortcut icon", href=favicon, type="image/x-icon")
+        each url in cssUrls
+            link(rel="Stylesheet", type="text/css", href=url)
+    body
+        block content
+        each url in jsUrls
+            script(type="text/javascript", src=url)

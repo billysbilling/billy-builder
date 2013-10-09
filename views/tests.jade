@@ -1,0 +1,37 @@
+extends layout
+
+block content
+        
+    style.
+        #qunit {
+            position: absolute;
+            top: 0;
+            right: 1025px;
+            bottom: 0;
+            left: 0;
+            overflow: auto;
+        }
+        
+        #ember-testing-container {  
+            position: absolute;
+            background: white;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 1024px;
+            overflow: hidden;
+            z-index: 9999;
+        }
+        #ember-testing {  
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+    div(id="qunit")
+    div(id="qunit-fixture")
+    
+    div(id="ember-testing-container")
+        div(id="ember-testing")
