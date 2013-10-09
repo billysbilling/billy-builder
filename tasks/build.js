@@ -10,7 +10,6 @@ module.exports = function(grunt) {
     }
 
     tasks = tasks.concat(['images', 'html', 'end_build']);
-    console.log(tasks);
 
     grunt.registerTask('build', tasks);
 };
