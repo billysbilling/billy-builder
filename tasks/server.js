@@ -1,3 +1,3 @@
 module.exports = function(grunt) {
-    grunt.registerTask('server', ['build', 'express', 'watch']);
+    grunt.registerTask('server', ['express', 'watch']);
 };
