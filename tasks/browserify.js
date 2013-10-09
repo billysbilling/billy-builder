@@ -32,14 +32,25 @@ module.exports = function(grunt) {
 
 function initBundle(grunt) {
     var b = browserify({
-        ignoreMissing: true
+        ignoreMissing: true,
+        noParse: [
+            './bower_components/jquery/jquery.js',
+            './bower_components/handlebars/handlebars.runtime.js',
+            './bower_components/ember/ember.js',
+            './bower_components/d3/d3.js',
+            './bower_components/lodash/dist/lodash.compat.js'
+        ]
     });
 
     addBowerRequires(grunt, b);
 
     b.add('./src/js/index.js');
-    b.add('./temp/handlebars.js');
-    b.add('./temp/svg.js');
+    b.require('./temp/templates.js', {
+        expose: 'templates'
+    });
+    b.require('./temp/svg.js', {
+        expose: 'svg'
+    });
     
     return b;
 }
