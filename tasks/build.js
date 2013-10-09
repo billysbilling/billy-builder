@@ -1,5 +1,9 @@
 module.exports = function(grunt) {
-    var tasks = ['start_build', 'handlebars', 'svg', 'browserify', 'uglify'];
+    var tasks = ['start_build', 'templates', 'svg', 'browserify'];
+    
+    if (process.env.NODE_ENV === 'production') {
+        tasks.push('uglify');
+    }
 
     if (grunt.config.get('billy_builder.sass')) {
         tasks.push('sass');

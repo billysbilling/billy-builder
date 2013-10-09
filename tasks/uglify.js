@@ -11,22 +11,15 @@ module.exports = function(grunt) {
 
     var versionPrefix = config.getVersionPrefix(grunt);
     
-    if (process.env.NODE_ENV === 'production') {
-        var files = {};
-        files['dist/'+versionPrefix+'js/bundle.js'] = 'dist/'+versionPrefix+'js/bundle.js';
-        
-        grunt.config.set('uglify', {
-            options: {
-                compress: false
-            },
-            dist: {
-                files: files
-            }
-        });
-    } else {
-        grunt.config.set('uglify', {
-            dontdoanything: {
-            }
-        });
-    }
+    var files = {};
+    files['dist/'+versionPrefix+'js/bundle.js'] = 'dist/'+versionPrefix+'js/bundle.js';
+    
+    grunt.config.set('uglify', {
+        options: {
+            compress: false
+        },
+        dist: {
+            files: files
+        }
+    });
 };

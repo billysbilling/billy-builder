@@ -4,7 +4,7 @@ var fs = require('fs'),
     handlebars = require('handlebars');
 
 module.exports = function(grunt) {
-    grunt.registerTask('handlebars', 'lol and build', function() {
+    grunt.registerTask('templates', 'lol and build', function() {
         var c = 'var templates = {};\n\n';
         
         c += compileTemplatesFromDir(grunt, '.');
@@ -15,7 +15,7 @@ module.exports = function(grunt) {
 
         c += 'module.exports = templates;';
         
-        grunt.file.write('temp/handlebars.js', c);
+        grunt.file.write('temp/templates.js', c);
 
         grunt.log.ok('Compiled Handlebars templates');
     });
