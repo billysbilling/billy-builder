@@ -4,23 +4,6 @@ var browserify = require('browserify'),
     async = require('async'),
     config = require('../config');
 
-var envOptions = {
-    development: {
-        bowerEntry: [
-            'index.js',
-            'src/js/index.js'
-        ]
-    },
-    production: {
-        bowerEntry: [
-            'index.min.js',
-            'src/js/index.min.js',
-            'index.js',
-            'src/js/index.js'
-        ]
-    }
-};
-
 module.exports = function(grunt) {
     grunt.registerTask('browserify', 'lol and build', function() {
         var done = this.async(),
@@ -63,18 +46,44 @@ function initBundle(grunt) {
 
 function addBowerRequires(grunt, b) {
     grunt.file.expand(['bower_components/*']).forEach(function(dir) {
-        grunt.util._.find(envOptions[process.env.NODE_ENV || 'development'].bowerEntry, function(suffix) {
-            var indexFile = path.join(dir, suffix);
-            if (grunt.file.isFile(indexFile)) {
-                b.require('./' + indexFile, {entry: true, expose: path.basename(dir)});
-                return true;
-            }
+        b.require('./' + getBowerMainFile(grunt, dir), {
+            expose: path.basename(dir)
         });
     });
 }
 
+function getBowerMainFile(grunt, dir) {
+    var bowerConfig;
+
+    try {
+        bowerConfig = JSON.parse(grunt.file.read(path.join(dir, 'bower.json')));
+    } catch (e) {
+        grunt.fail.fatal('Could not read bower.json from '+dir+': '+e.message);
+        return;
+    }
+
+    var main = bowerConfig.main;
+    if (main instanceof Array) {
+        main = main[0];
+    }
+    var mainFile = path.join(dir, main);
+
+    if (!grunt.file.exists(mainFile)) {
+        grunt.fail.fatal('Main bower file '+mainFile+' does not exist.');
+    }
+
+    if (process.env.NODE_ENV === 'production') {
+        var minMainFile = path.join(dir, main.replace(/\.js$/, '.min.js'));
+        if (grunt.file.exists(minMainFile)) {
+            mainFile = minMainFile;
+        }
+    }
+    return mainFile;
+}
+
 function bundle(grunt, b, dest, callback) {
     b.bundle({
+        detectGlobals: false,
         debug: process.env.NODE_ENV !== 'production'
     }, function(err, src) {
         if (err) {
