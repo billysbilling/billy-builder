@@ -11,11 +11,8 @@ module.exports = function(grunt) {
     
     var versionPrefix = config.getVersionPrefix(grunt);
 
-    var files = {},
-        source = 'src/scss/index.scss';
-    if (grunt.file.exists(source)) {
-        files['dist/'+versionPrefix+'css/bundle.css'] = source;
-    }
+    var files = {};
+    files['dist/'+versionPrefix+'css/bundle.css'] = 'src/scss/bundle.scss';
     
     grunt.config.set('sass', {
         dist: {

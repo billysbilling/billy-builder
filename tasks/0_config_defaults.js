@@ -3,6 +3,10 @@ var config = require('../config');
 module.exports = function(grunt) {
     var defaults = {
         version: 'default',
+        
+        compass: false,
+        sass: false,
+        
         title: 'Unnamed billy-builder app',
         favicon: grunt.file.exists('src/images/favicon.ico') ? config.getVersionPrefix(grunt)+'images/favicon.ico' : null,
         jsConfig: null,

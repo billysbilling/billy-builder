@@ -9,21 +9,15 @@ module.exports = function(grunt) {
 
     grunt.loadTasks(path.join(__dirname, '../node_modules/grunt-contrib-compass/tasks'));
     
-    if (grunt.file.isDir('src/scss')) {
-        var versionPrefix = config.getVersionPrefix(grunt);
-        grunt.config.set('compass', {
-            dist: {
-                options: {
-                    sassDir: 'src/scss/',
-                    cssDir: 'dist/'+versionPrefix+'css',
-                    environment: process.env.NODE_ENV || 'development'
-                }
+    var versionPrefix = config.getVersionPrefix(grunt);
+    
+    grunt.config.set('compass', {
+        dist: {
+            options: {
+                sassDir: 'src/scss/',
+                cssDir: 'dist/'+versionPrefix+'css',
+                environment: process.env.NODE_ENV || 'development'
             }
-        });
-    } else {
-        grunt.config.set('compass', {
-            noscss: {
-            }
-        });
-    }
+        }
+    });
 };
