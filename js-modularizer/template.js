@@ -1,4 +1,4 @@
-require=(function(moduleDefinitions, exposes, entries) {
+var require = (function(moduleDefinitions, exposes, entries) {
     var modules = {};
     
     var load = function (moduleName, allowNotFound) {
