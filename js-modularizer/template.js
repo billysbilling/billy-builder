@@ -35,7 +35,6 @@ require=(function(moduleDefinitions, exposes, entries) {
     
     var relativeRequireFactory = function(requirerName) {
         var requirerDir = requirerName.replace(/\/[^\/]*$/, '');
-        console.log(requirerName, requirerDir);
         return function(moduleName) {
             if (moduleName.substring(0, 2) === './' || moduleName.substring(0, 3) === '../') {
                 moduleName = canonicalizePath(requirerDir + '/' + moduleName);
