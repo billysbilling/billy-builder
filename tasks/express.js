@@ -28,6 +28,7 @@ function createApp() {
     var app = express();
     
     app.set('port', process.env.PORT || 4499);
+    app.use('/tests.html', express.static('dist/tests.html'));
     app.use('/', express.static('dist'));
     app.use(express.errorHandler());
 
