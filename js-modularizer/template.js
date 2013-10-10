@@ -1,6 +1,22 @@
 require=(function(moduleDefinitions, exposes, entries) {
     var modules = {};
     
+    var load = function (moduleName) {
+        var definition = moduleDefinitions[moduleName];
+
+        if (!definition) {
+            var e = Error('Cannot find module '+moduleName);
+            e.code = 'MODULE_NOT_FOUND';
+            throw e;
+        }
+
+        var module = {
+            exports: {}
+        };
+        definition.call(module.exports, module, relativeRequireFactory(moduleName));
+        return module;
+    };
+    
     var require = function(moduleName) {
         var exposedName = exposes[moduleName];
         if (exposedName) {
@@ -10,18 +26,7 @@ require=(function(moduleDefinitions, exposes, entries) {
         var module = modules[moduleName];
         
         if (!modules[moduleName]) {
-            var definition = moduleDefinitions[moduleName];
-            
-            if (!definition) {
-                var e = Error('Cannot find module '+moduleName);
-                e.code = 'MODULE_NOT_FOUND';
-                throw e;
-            }
-            
-            module = {
-                exports: {}
-            };
-            definition.call(module.exports, module, relativeRequireFactory(moduleName));
+            module = load(moduleName);
         }
         
         return module.exports;
