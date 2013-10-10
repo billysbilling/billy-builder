@@ -1,13 +1,17 @@
 require=(function(moduleDefinitions, exposes, entries) {
     var modules = {};
     
-    var load = function (moduleName) {
+    var load = function (moduleName, allowNotFound) {
         var definition = moduleDefinitions[moduleName];
 
         if (!definition) {
-            var e = Error('Cannot find module '+moduleName);
-            e.code = 'MODULE_NOT_FOUND';
-            throw e;
+            if (allowNotFound === true) {
+                return false;
+            } else {
+                var e = Error('Cannot find module '+moduleName);
+                e.code = 'MODULE_NOT_FOUND';
+                throw e;
+            }
         }
 
         var module = {
@@ -19,7 +23,7 @@ require=(function(moduleDefinitions, exposes, entries) {
         return module;
     };
     
-    var require = function(moduleName) {
+    var require = function(moduleName, allowNotFound) {
         var exposedName = exposes[moduleName];
         if (exposedName) {
             return require(exposedName);
@@ -28,7 +32,10 @@ require=(function(moduleDefinitions, exposes, entries) {
         var module = modules[moduleName];
         
         if (!module) {
-            module = load(moduleName);
+            module = load(moduleName, allowNotFound);
+            if (module === false) {
+                return false;
+            }
         }
         
         return module.exports;
@@ -36,11 +43,11 @@ require=(function(moduleDefinitions, exposes, entries) {
     
     var relativeRequireFactory = function(requirerName) {
         var requirerDir = requirerName.replace(/\/[^\/]*$/, '');
-        return function(moduleName) {
+        return function(moduleName, allowNotFound) {
             if (moduleName.substring(0, 2) === './' || moduleName.substring(0, 3) === '../') {
                 moduleName = canonicalizePath(requirerDir + '/' + moduleName);
             }
-            return require(moduleName);
+            return require(moduleName, allowNotFound);
         };
     };
 
