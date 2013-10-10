@@ -6,7 +6,7 @@ var require = (function(moduleDefinitions, exposes, entries) {
 
         if (!definition) {
             if (allowNotFound === true) {
-                return false;
+                return null;
             } else {
                 var e = Error('Cannot find module '+moduleName);
                 e.code = 'MODULE_NOT_FOUND';
@@ -33,8 +33,8 @@ var require = (function(moduleDefinitions, exposes, entries) {
         
         if (!module) {
             module = load(moduleName, allowNotFound);
-            if (module === false) {
-                return false;
+            if (module === null) {
+                return null;
             }
         }
         
