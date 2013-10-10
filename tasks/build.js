@@ -1,5 +1,5 @@
 module.exports = function(grunt) {
-    var tasks = ['start_build', 'templates', 'svg', 'browserify'];
+    var tasks = ['start_build', 'templates', 'svg', 'js-modularize'];
     
     if (process.env.NODE_ENV === 'production') {
         tasks.push('uglify');

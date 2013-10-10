@@ -1,69 +1,71 @@
-var browserify = require('browserify'),
-    path = require('path'),
-    fs = require('fs'),
+var path = require('path'),
     async = require('async'),
+    Modularizer = require('../js-modularizer/js-modularizer'),
     config = require('../config');
 
 module.exports = function(grunt) {
-    grunt.registerTask('browserify', 'lol and build', function() {
+    grunt.registerTask('js-modularize', 'lol and build', function() {
         var done = this.async(),
             versionPrefix = config.getVersionPrefix(grunt);
         
         async.series([
             function(callback) {
-                var b = initBundle(grunt);
-                bundle(grunt, b, './dist/'+versionPrefix+'js/bundle.js', callback);
+                var m = initModularizer(grunt);
+                bundle(grunt, m, './dist/'+versionPrefix+'js/bundle.js', callback);
             },
             function(callback) {
-                var b = initBundle(grunt);
+                var m = initModularizer(grunt);
 
-                if (grunt.file.exists('tests')) {
+                if (grunt.file.isDir('tests')) {
                     grunt.file.recurse('tests', function(abspath) {
-                        b.add('./' + abspath);
+                        m.add('./' + abspath, {entry: true});
                     });
                 }
                 
-                bundle(grunt, b, './dist/'+versionPrefix+'js/tests-bundle.js', callback);
+                bundle(grunt, m, './dist/'+versionPrefix+'js/tests-bundle.js', callback);
             }
         ], done);
     });
 };
 
 
-function initBundle(grunt) {
-    var b = browserify({
-        ignoreMissing: true,
-        noParse: [
-            './bower_components/jquery/jquery.js',
-            './bower_components/handlebars/handlebars.runtime.js',
-            './bower_components/ember/ember.js',
-            './bower_components/d3/d3.js',
-            './bower_components/lodash/dist/lodash.compat.js'
-        ]
+function initModularizer(grunt) {
+    var m = new Modularizer();
+
+    requireBowerComponents(grunt, m);
+
+    addFiles(grunt, m, 'src/js');
+
+    m.add('./src/js/index.js', {
+        entry: true
     });
-
-    addBowerRequires(grunt, b);
-
-    b.add('./src/js/index.js');
-    b.require('./temp/templates.js', {
+    
+    m.add('./temp/templates.js', {
         expose: 'templates'
     });
-    b.require('./temp/svg.js', {
+    m.add('./temp/svg.js', {
         expose: 'svg'
     });
     
-    return b;
+    return m;
 }
 
-function addBowerRequires(grunt, b) {
+function requireBowerComponents(grunt, m) {
     grunt.file.expand(['bower_components/*']).forEach(function(dir) {
-        b.require('./' + getBowerMainFile(grunt, dir), {
+        var bower = getBowerConfig(grunt, dir),
+            bb = bower.config.billyBuilder;
+        
+        if (bb && bb.include) {
+            addFiles(grunt, m, path.join(dir, bb.include));
+        }
+        
+        m.add('./' + bower.mainFile, {
             expose: path.basename(dir)
         });
     });
 }
 
-function getBowerMainFile(grunt, dir) {
+function getBowerConfig(grunt, dir) {
     var bowerConfig;
 
     try {
@@ -89,16 +91,22 @@ function getBowerMainFile(grunt, dir) {
             mainFile = minMainFile;
         }
     }
-    return mainFile;
+    return {
+        config: bowerConfig,
+        mainFile: mainFile
+    };
 }
 
-function bundle(grunt, b, dest, callback) {
-    b.bundle({
-        detectGlobals: false,
-        debug: process.env.NODE_ENV !== 'production'
-    }, function(err, src) {
+function addFiles(grunt, m, dir) {
+    grunt.file.expand([dir+'/**/*.js']).forEach(function(file) {
+        m.add('./' + file);
+    });
+}
+
+function bundle(grunt, m, dest, callback) {
+    m.bundle(function(err, src) {
         if (err) {
-            grunt.log.error('Browserify compilation failed:');
+            grunt.log.error('Modularizer compilation failed:');
             grunt.fail.fatal(err);
             return;
         }
