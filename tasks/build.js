@@ -1,19 +1,3 @@
 module.exports = function(grunt) {
-    var tasks = ['start_build', 'templates', 'svg', 'js-modularize'];
-    
-    if (process.env.NODE_ENV === 'production') {
-        tasks.push('uglify');
-    }
-
-    if (grunt.config.get('billy_builder.sass')) {
-        tasks.push('sass');
-    }
-
-    if (grunt.config.get('billy_builder.compass')) {
-        tasks.push('compass');
-    }
-
-    tasks = tasks.concat(['images', 'html', 'end_build']);
-
-    grunt.registerTask('build', tasks);
+    grunt.registerTask('build', ['start-build', 'templates', 'svg', 'js-modularize', 'build-js', 'build-css', 'images', 'html', 'end-build']);
 };

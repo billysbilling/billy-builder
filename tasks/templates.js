@@ -41,5 +41,5 @@ function compileTemplatesFromDir(grunt, dir) {
 
 
 function compileTemplate(grunt, abspath, name) {
-    return 'templates[\''+name+'\'] = '+handlebars.precompile(grunt.file.read(abspath))+';\n\n'
+    return 'templates[\''+name+'\'] = Ember.Handlebars.compile('+JSON.stringify(grunt.file.read(abspath))+');\n\n'
 }

@@ -1,3 +1,3 @@
 module.exports = function(grunt) {
-    grunt.registerTask('test', ['build', 'test_runner']);
+    grunt.registerTask('test', ['build', 'test-runner']);
 };

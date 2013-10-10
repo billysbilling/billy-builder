@@ -2,11 +2,9 @@ var path = require('path'),
     config = require('../config');
 
 module.exports = function(grunt) {
-    grunt.registerTask('start_build', 'lol and build', function() {
+    grunt.registerTask('start-build', 'lol and build', function() {
         var versionPrefix = config.getVersionPrefix(grunt);
         
-        grunt.file.delete('dist');
-
         grunt.file.mkdir('dist');
 
         grunt.file.mkdir('temp');
