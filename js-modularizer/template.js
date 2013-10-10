@@ -18,7 +18,7 @@ require=(function(moduleDefinitions, exposes, entries) {
             exports: {}
         };
         modules[moduleName] = module;
-        definition.call(module.exports, module, relativeRequireFactory(moduleName));
+        definition.call(module.exports, module, module.exports, relativeRequireFactory(moduleName));
         
         return module;
     };

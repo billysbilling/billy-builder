@@ -39,7 +39,7 @@ Modularizer.prototype._buildFileContents = function(callback) {
 Modularizer.prototype._pushFileContents = function(contents, file, callback) {
     fs.readFile(file, function(err, fileContents) {
         if (err) return callback(err);
-        contents.push('\''+toName(file)+'\': function(module, require) {\n'+fileContents+'\n}')
+        contents.push('\''+toName(file)+'\': function(module, exports, require) {\n'+fileContents+'\n}')
         callback(null, contents);
     });
 };
