@@ -1,5 +1,6 @@
 var express = require('express'),
     connect = require('connect'),
+    connectLivereload = require('connect-livereload'),
     http = require('http'),
     path = require('path'),
     async = require('async'),
@@ -28,10 +29,13 @@ function createApp() {
     var app = express();
     
     app.set('port', process.env.PORT || 4499);
+    app.use(connectLivereload({
+        port: 35729
+    }));
     app.use('/tests.html', express.static('dist/tests.html'));
     app.use('/', express.static('dist'));
     app.use(express.errorHandler());
-
+    
     setupCatchAll(app);
     
     return app;

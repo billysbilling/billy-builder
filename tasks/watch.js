@@ -9,6 +9,9 @@ module.exports = function(grunt) {
     grunt.loadTasks(path.join(__dirname, '../node_modules/grunt-contrib-watch/tasks'));
     
     grunt.config.set('watch', {
+        options: {
+            livereload: true
+        },
         all: {
             options: {
                 atBegin: true,
