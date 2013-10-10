@@ -35,14 +35,12 @@ function initModularizer(grunt) {
     requireBowerComponents(grunt, m);
 
     addFiles(grunt, m, 'src/js');
+    addFiles(grunt, m, 'src/templates');
 
     m.add('./src/js/index.js', {
         entry: true
     });
     
-    m.add('./temp/templates.js', {
-        expose: 'templates'
-    });
     m.add('./temp/svg.js', {
         expose: 'svg'
     });
@@ -98,7 +96,7 @@ function getBowerConfig(grunt, dir) {
 }
 
 function addFiles(grunt, m, dir) {
-    grunt.file.expand([dir+'/**/*.js']).forEach(function(file) {
+    grunt.file.expand([dir+'/**/*.js', dir+'/**/*.hbs']).forEach(function(file) {
         m.add('./' + file);
     });
 }

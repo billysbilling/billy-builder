@@ -3,10 +3,6 @@ var fs = require('fs'),
     path = require('path'),
     _ = require('lodash');
 
-function toName(file) {
-    return file.replace(/\.js$/, '');
-}
-
 var Modularizer = function() {
     this._files = {};
 };
@@ -39,6 +35,13 @@ Modularizer.prototype._buildFileContents = function(callback) {
 Modularizer.prototype._pushFileContents = function(contents, file, callback) {
     fs.readFile(file, function(err, fileContents) {
         if (err) return callback(err);
+
+        fileContents = fileContents.toString();
+        
+        var extension = path.extname(file),
+            transform = transforms[extension];
+        fileContents = transform(fileContents);
+        
         contents.push('\''+toName(file)+'\': function(module, exports, require) {\n'+fileContents+'\n}')
         callback(null, contents);
     });
@@ -84,4 +87,19 @@ Modularizer.prototype._compile = function(contents, exposes, entries, callback) 
         var compiled = template[0] + contents.join(',\n') + template[1] + exposes.join(',\n') + template[2] + entries.join(',\n') + template[3];
         callback(null, compiled);
     });
+};
+
+
+function toName(file) {
+    return file.replace(/\.[^\.]*$/, '');
+}
+
+var transforms = {};
+
+transforms['.js'] = function(contents) {
+    return contents;
+};
+
+transforms['.hbs'] = transforms['.handlebars'] = function(contents) {
+    return 'module.exports = Ember.Handlebars.compile('+JSON.stringify(contents)+');';
 };
