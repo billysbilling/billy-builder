@@ -7,12 +7,13 @@ var path = require('path'),
 module.exports = function(grunt) {
     grunt.registerTask('html', 'lol and build', function() {
         var c = config.getAll(grunt),
-            versionPrefix = config.getVersionPrefix(grunt);
+            versionPrefix = config.getVersionPrefix(grunt),
+            commonConfig = {releaseDir: versionPrefix};
         
         writeHtml(grunt, 'index', {
             title: c.title,
             favicon: c.favicon,
-            jsConfig: JSON.stringify(grunt.util._.extend({}, c.jsConfig, c.indexJsConfig)),
+            jsConfig: JSON.stringify(grunt.util._.extend({}, commonConfig, c.jsConfig, c.indexJsConfig)),
             cssUrls: [
                 versionPrefix+'css/bundle.css'
             ],
@@ -24,7 +25,7 @@ module.exports = function(grunt) {
         writeHtml(grunt, 'tests', {
             title: 'Tests: '+c.title,
             favicon: c.favicon,
-            jsConfig: JSON.stringify(grunt.util._.extend({isTest: true}, c.jsConfig, c.testsJsConfig)),
+            jsConfig: JSON.stringify(grunt.util._.extend({isTest: true}, commonConfig, c.jsConfig, c.testsJsConfig)),
             cssUrls: [
                 versionPrefix+'vendor/qunit/qunit.css',
                 versionPrefix+'css/bundle.css'
