@@ -9,15 +9,18 @@ module.exports = function(grunt) {
     grunt.loadTasks(path.join(__dirname, '../node_modules/grunt-contrib-watch/tasks'));
     
     grunt.config.set('watch', {
-        options: {
-            atBegin: true,
-            spawn: false
-        },
-        files: [
-            'src/**',
-            'bower_components/**',
-            'tests/**'
-        ],
-        tasks: ['build']
+        scripts: {
+            options: {
+                atBegin: true,
+                interrupt: true,
+                spawn: false
+            },
+            files: [
+                'src/**/*.js',
+                'bower_components/**/*.js',
+                'tests/**/*.js'
+            ],
+            tasks: ['build']
+        }
     });
 };
