@@ -13,6 +13,7 @@ require=(function(moduleDefinitions, exposes, entries) {
         var module = {
             exports: {}
         };
+        modules[moduleName] = module;
         definition.call(module.exports, module, relativeRequireFactory(moduleName));
         
         return module;
