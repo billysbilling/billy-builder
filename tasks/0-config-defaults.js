@@ -4,6 +4,8 @@ module.exports = function(grunt) {
     var defaults = {
         version: 'default',
         
+        dependencyDirs: ['bower_components/*'],
+        
         compass: false,
         sass: false,
         
@@ -16,7 +18,7 @@ module.exports = function(grunt) {
     
     for (var k in defaults) {
         if (!defaults.hasOwnProperty(k)) continue;
-        var configKey = 'billy_builder.'+k;
+        var configKey = 'billy-builder.'+k;
         if (typeof grunt.config.get(configKey) === 'undefined') {
             grunt.config.set(configKey, defaults[k]);
         }

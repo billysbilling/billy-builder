@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 function initModularizer(grunt) {
     var m = new Modularizer();
 
-    requireBowerComponents(grunt, m);
+    requireDependencies(grunt, m);
 
     addFiles(grunt, m, 'src/js');
     addFiles(grunt, m, 'src/templates');
@@ -48,8 +48,9 @@ function initModularizer(grunt) {
     return m;
 }
 
-function requireBowerComponents(grunt, m) {
-    grunt.file.expand(['bower_components/*']).forEach(function(dir) {
+function requireDependencies(grunt, m) {
+    grunt.file.expand(grunt.config.get('billy-builder.dependencyDirs')).forEach(function(dir) {
+        console.log(dir);
         var bower = getBowerConfig(grunt, dir),
             bb = bower.config.billyBuilder;
         
