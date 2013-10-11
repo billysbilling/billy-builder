@@ -52,7 +52,6 @@ function startServer(app, callback) {
 
 function htmlRouteFactory(file) {
     return function(req, res, callback) {
-        console.log(file, req.url);
         async.series([
             function(callback) {
                 waitForBuild(1, callback);
