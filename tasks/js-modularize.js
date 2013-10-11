@@ -51,7 +51,7 @@ function initModularizer(grunt) {
 function requireDependencies(grunt, m) {
     grunt.file.expand(grunt.config.get('billy-builder.dependencyDirs')).forEach(function(dir) {
         var bower = getBowerConfig(grunt, dir),
-            bb = bower.config.billyBuilder;
+            bb = bower.config['billy-builder'];
         
         if (bb && bb.include) {
             addFiles(grunt, m, path.join(dir, bb.include));
