@@ -8,6 +8,25 @@ module.exports = function(grunt) {
 
     grunt.loadTasks(path.join(__dirname, '../node_modules/grunt-contrib-watch/tasks'));
     
+    var jsFiles = [
+        'src/**/*.js',
+        'src/**/*.hbs',
+        'src/**/*.svg',
+        'tests/**/*.js'
+    ];
+    
+    var cssFiles = [
+        'src/**/*.scss'
+    ];
+    
+    grunt.config.get('billy-builder.dependencyDirs').forEach(function(dir) {
+        jsFiles.push(dir+'/**/*.js');
+        jsFiles.push(dir+'/**/*.hbs');
+        jsFiles.push(dir+'/**/*.svg');
+
+        cssFiles.push(dir+'/**/*.scss');
+    });
+    
     grunt.config.set('watch', {
         options: {
             livereload: true
@@ -28,15 +47,7 @@ module.exports = function(grunt) {
                 interrupt: true,
                 spawn: false
             },
-            files: [
-                'src/**/*.js',
-                'src/**/*.hbs',
-                'src/**/*.svg',
-                'bower_components/**/*.js',
-                'bower_components/**/*.hbs',
-                'bower_components/**/*.svg',
-                'tests/**/*.js'
-            ],
+            files: jsFiles,
             tasks: ['start-build', 'build-js', 'end-build']
         },
         css: {
@@ -44,10 +55,7 @@ module.exports = function(grunt) {
                 interrupt: true,
                 spawn: false
             },
-            files: [
-                'src/**/*.scss',
-                'bower_components/**/*.scss'
-            ],
+            files: cssFiles,
             tasks: ['start-build', 'build-css', 'end-build']
         }
     });
