@@ -16,7 +16,8 @@ module.exports = function(grunt) {
             options: {
                 sassDir: 'src/scss/',
                 cssDir: 'dist/'+versionPrefix+'css',
-                environment: process.env.NODE_ENV || 'development'
+                environment: process.env.NODE_ENV || 'development',
+                importPath: [path.resolve('./new-components')]
             }
         }
     });
