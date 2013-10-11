@@ -2,18 +2,19 @@ var path = require('path'),
     fs = require('fs'),
     jade = require('jade'),
     async = require('async'),
+    _ = require('lodash'),
     config = require('../config');
 
 module.exports = function(grunt) {
     grunt.registerTask('html', 'lol and build', function() {
         var c = config.getAll(grunt),
             versionPrefix = config.getVersionPrefix(grunt),
-            commonConfig = {releaseDir: versionPrefix};
+            commonConfig = {ENV: {releaseDir: versionPrefix}};
         
         writeHtml(grunt, 'index', {
             title: c.title,
             favicon: c.favicon,
-            jsConfig: JSON.stringify(grunt.util._.extend({}, commonConfig, c.jsConfig, c.indexJsConfig)),
+            jsConfig: _.merge({}, commonConfig, c.jsConfig, c.indexJsConfig),
             cssUrls: [
                 versionPrefix+'css/bundle.css'
             ],
@@ -25,7 +26,7 @@ module.exports = function(grunt) {
         writeHtml(grunt, 'tests', {
             title: 'Tests: '+c.title,
             favicon: c.favicon,
-            jsConfig: JSON.stringify(grunt.util._.extend({isTest: true}, commonConfig, c.jsConfig, c.testsJsConfig)),
+            jsConfig: _.merge({ENV: {isTest: true}}, commonConfig, c.jsConfig, c.testsJsConfig),
             cssUrls: [
                 versionPrefix+'vendor/qunit/qunit.css',
                 versionPrefix+'css/bundle.css'
@@ -39,6 +40,8 @@ module.exports = function(grunt) {
 };
 
 function writeHtml(grunt, viewName, locals, dest) {
+    formatJsConfig(locals);
+    
     var viewFile = path.join(__dirname, '../views/'+viewName+'.jade');
 
     var c = grunt.file.read(viewFile);
@@ -52,4 +55,11 @@ function writeHtml(grunt, viewName, locals, dest) {
     grunt.file.write(dest, html);
 
     grunt.log.ok('Built '+dest);
+}
+
+function formatJsConfig(locals) {
+    var jsConfig = locals.jsConfig;
+    locals.jsConfig = _.reduce(jsConfig, function(result, obj, name) {
+        return result + 'var '+name+'='+JSON.stringify(obj)+';';
+    }, '');
 }
