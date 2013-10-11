@@ -16,10 +16,10 @@ module.exports = function(grunt) {
             favicon: c.favicon,
             jsConfig: _.merge({}, commonConfig, c.jsConfig, c.indexJsConfig),
             cssUrls: [
-                versionPrefix+'css/bundle.css'
+                '/'+versionPrefix+'css/bundle.css'
             ],
             jsUrls: [
-                versionPrefix+'js/bundle.js'
+                '/'+versionPrefix+'js/bundle.js'
             ]
         }, 'dist/index.html');
         
@@ -28,12 +28,12 @@ module.exports = function(grunt) {
             favicon: c.favicon,
             jsConfig: _.merge({ENV: {isTest: true}}, commonConfig, c.jsConfig, c.testsJsConfig),
             cssUrls: [
-                versionPrefix+'vendor/qunit/qunit.css',
-                versionPrefix+'css/bundle.css'
+                '/'+versionPrefix+'vendor/qunit/qunit.css',
+                '/'+versionPrefix+'css/bundle.css'
             ],
             jsUrls: [
-                versionPrefix+'vendor/qunit/qunit.js',
-                versionPrefix+'js/tests-bundle.js'
+                '/'+versionPrefix+'vendor/qunit/qunit.js',
+                '/'+versionPrefix+'js/tests-bundle.js'
             ]
         }, 'dist/tests.html');
     });
