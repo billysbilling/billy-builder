@@ -49,7 +49,11 @@ function initModularizer(grunt) {
 }
 
 function requireDependencies(grunt, m) {
-    grunt.file.expand(grunt.config.get('billy-builder.dependencyDirs')).forEach(function(dir) {
+    var dependencyDirs = grunt.config.get('billy-builder.dependencyDirs').map(function(dir) {
+        return dir + '/*';
+    });
+    
+    grunt.file.expand(dependencyDirs).forEach(function(dir) {
         var bower = getBowerConfig(grunt, dir),
             bb = bower.config['billy-builder'];
         
@@ -57,9 +61,11 @@ function requireDependencies(grunt, m) {
             addFiles(grunt, m, path.join(dir, bb.include));
         }
         
-        m.add('./' + bower.mainFile, {
-            expose: path.basename(dir)
-        });
+        if (bower.mainFile) {
+            m.add('./' + bower.mainFile, {
+                expose: path.basename(dir)
+            });
+        }
     });
 }
 
@@ -73,20 +79,23 @@ function getBowerConfig(grunt, dir) {
         return;
     }
 
-    var main = bowerConfig.main;
-    if (main instanceof Array) {
-        main = main[0];
-    }
-    var mainFile = path.join(dir, main);
+    var main = bowerConfig.main,
+        mainFile = null;
+    if (main) {
+        if (main instanceof Array) {
+            main = main[0];
+        }
+        mainFile = path.join(dir, main || '');
+    
+        if (!grunt.file.exists(mainFile)) {
+            grunt.fail.fatal('Main bower file '+mainFile+' does not exist.');
+        }
 
-    if (!grunt.file.exists(mainFile)) {
-        grunt.fail.fatal('Main bower file '+mainFile+' does not exist.');
-    }
-
-    if (process.env.NODE_ENV === 'production') {
-        var minMainFile = path.join(dir, main.replace(/\.js$/, '.min.js'));
-        if (grunt.file.exists(minMainFile)) {
-            mainFile = minMainFile;
+        if (process.env.NODE_ENV === 'production') {
+            var minMainFile = path.join(dir, main.replace(/\.js$/, '.min.js'));
+            if (grunt.file.exists(minMainFile)) {
+                mainFile = minMainFile;
+            }
         }
     }
     return {

@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     var defaults = {
         version: 'default',
         
-        dependencyDirs: ['bower_components/*'],
+        dependencyDirs: ['bower_components'],
         
         compass: false,
         sass: false,
