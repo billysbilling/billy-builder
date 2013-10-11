@@ -32,11 +32,13 @@ function createApp() {
     app.use(connectLivereload({
         port: 35729
     }));
-    app.use('/tests.html', express.static('dist/tests.html'));
-    app.use('/', express.static('dist'));
     app.use(express.errorHandler());
+
+    app.use('/tests.html', htmlRouteFactory('dist/tests.html'));
     
-    setupCatchAll(app);
+    app.use('/', express.static('dist'));
+    
+    app.get('*', htmlRouteFactory('dist/index.html'));
     
     return app;
 }
@@ -48,21 +50,22 @@ function startServer(app, callback) {
     });
 }
 
-function setupCatchAll(app) {
-    app.get('*', function(req, res) {
+function htmlRouteFactory(file) {
+    return function(req, res, callback) {
+        console.log(file, req.url);
         async.series([
             function(callback) {
                 waitForBuild(1, callback);
             },
             function(callback) {
                 res.set('Content-Type', 'text/html');
-                res.send(fs.readFileSync('dist/index.html'));
+                res.send(fs.readFileSync(file));
                 callback();
             }
         ], function(err) {
             if (err) return callback(err);
         });
-    });
+    };
 }
 
 function waitForBuild(attempt, callback) {
