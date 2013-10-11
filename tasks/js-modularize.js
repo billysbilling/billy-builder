@@ -58,7 +58,9 @@ function requireDependencies(grunt, m) {
             bb = bower.config['billy-builder'];
         
         if (bb && bb.include) {
-            addFiles(grunt, m, path.join(dir, bb.include));
+            (bb.include instanceof Array ? bb.include : [bb.include]).forEach(function(include) {
+                addFiles(grunt, m, path.join(dir, include));
+            });
         }
         
         if (bower.mainFile) {
