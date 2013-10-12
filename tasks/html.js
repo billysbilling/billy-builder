@@ -26,7 +26,7 @@ module.exports = function(grunt) {
         writeHtml(grunt, 'tests', {
             title: 'Tests: '+c.title,
             favicon: c.favicon,
-            jsConfig: _.merge({ENV: {isTest: true}}, commonConfig, c.jsConfig, c.testsJsConfig),
+            jsConfig: _.merge({}, commonConfig, c.jsConfig, c.testsJsConfig),
             cssUrls: [
                 '/'+versionPrefix+'vendor/qunit/qunit.css',
                 '/'+versionPrefix+'css/bundle.css'

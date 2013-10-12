@@ -11,9 +11,13 @@ module.exports = function(grunt) {
         
         title: 'Unnamed billy-builder app',
         favicon: grunt.file.exists('src/images/favicon.ico') ? config.getVersionPrefix(grunt)+'images/favicon.ico' : null,
-        jsConfig: null,
-        indexJsConfig: null,
-        testsJsConfig: null
+        jsConfig: {},
+        indexJsConfig: {},
+        testsJsConfig: {
+            ENV: {
+                isTest: true
+            }
+        }
     };
     
     for (var k in defaults) {
