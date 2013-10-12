@@ -5,13 +5,17 @@
 > Billy Builder :musical_note:  
 > Yes, we can! :musical_note:
 
-Billy-builder is a collection of Grunt tasks that makes it easy to manage multiple JavaScript projects meant to be consumed in a browser.
+Billy-builder is a collection of Grunt tasks that makes it easy to manage multiple JavaScript projects meant to be
+consumed in a browser.
 
-We use it at [Billy's Billing](https://billysbilling.com/) to build and test all our webapps and components in a unified way.
+We use it at [Billy's Billing](https://billysbilling.com/) to build and test all our webapps and components in a unified
+way.
 
 
 ## TODO
 
+- Tests :whale2:
+- Maybe split a few things into their own modules (such as js-modularizer).
 - Toggle ember-testing container
 - Multiple server ports
 - Make the `images` task into a copy task, that can be configured for multiple targets. E.g. "images" and "fonts"
@@ -19,7 +23,8 @@ We use it at [Billy's Billing](https://billysbilling.com/) to build and test all
 
 ## Installation
 
-Billy Builder depends on [grunt-cli](https://github.com/gruntjs/grunt-cli) and [bower](http://bower.io/) to be installed globally first.
+Billy-builder depends on [grunt-cli](https://github.com/gruntjs/grunt-cli) and [bower](http://bower.io/) to be installed
+globally first. Easy way: `npm install -g grunt-cli bower`.
 
 Add `billy-builder` as an npm dev-dependency:
  
@@ -51,7 +56,27 @@ You can then run `bower install`, which will install the dependencies in the `bo
 
 ### Customizing billy-builder
 
-In your `Gruntfile.js` you can add a key called `billy-builder` with the following options.
+In your `Gruntfile.js` you can add a key called `billy-builder` to customize the behavior of billy-builder. Example:
+
+```javascript
+module.exports = function(grunt) {
+    grunt.initConfig({
+        'billy-builder': {
+          title: 'Billy\'s Billing',
+          compass: true,
+          jsConfig: {
+            ENV: {
+              apiUrl: 'https://api.billysbilling.com/v2'
+            }
+          }
+        }
+    });
+    
+    grunt.loadNpmTasks('billy-builder');
+};
+```
+
+The following options are supported:
 
 #### title
 
