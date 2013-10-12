@@ -2,8 +2,6 @@ var fs = require('fs'),
     page = require('webpage').create(),
     url = 'http://localhost:4499/tests.html',
     failures = [],
-    dotLineSize = 0,
-    totalDots = 0,
     screenshotIndex = 0;
 
 page.onError = function(message, trace) {
@@ -111,18 +109,11 @@ page.onCallback = function(message) {
 };
 
 page.onConsoleMessage = function(message) {
-    console.log('LOG: '+message);
+//    console.log('LOG: '+message);
 };
 
 function dot(color) {
-    if (dotLineSize >= 100) {
-        fs.write("/dev/stdout", " "+totalDots, "w");
-        console.log('');
-        dotLineSize = 0;
-    }
     fs.write("/dev/stdout", coloredText('.', color), "w");
-    dotLineSize++;
-    totalDots++;
 }
 
 function coloredText(text, color) {
