@@ -1,16 +1,17 @@
 var fs = require('fs'),
     page = require('webpage').create(),
-    url = 'file://localhost'+require('fs').workingDirectory+'/dist/tests.html',
+    url = 'http://localhost:4499/tests.html',
     failures = [],
     dotLineSize = 0,
     totalDots = 0,
     screenshotIndex = 0;
 
-console.log('');
-
 page.onError = function(message, trace) {
-    console.log('Page error: '+message);
-    console.log(trace);
+    console.log('');
+    console.log(coloredText('Page error: '+message, '0;31'));
+    console.log('');
+    console.log('Stack trace:');
+    console.log(JSON.stringify(trace, null, '  '));
     phantom.exit(1);
 };
 
@@ -22,6 +23,14 @@ page.onInitialized = function() {
                 if (!details.result) {
                     window.callPhantom({
                         command: 'QUnit.assertionFailed',
+                        details: details
+                    });
+                }
+            });
+            QUnit.moduleStart(function(details) {
+                if (!details.result) {
+                    window.callPhantom({
+                        command: 'QUnit.moduleStart',
                         details: details
                     });
                 }
@@ -48,7 +57,7 @@ page.onInitialized = function() {
 };
 
 page.viewportSize = {
-    width: 1024,
+    width: 1324,
     height: 800
 };
 
@@ -71,12 +80,20 @@ page.onCallback = function(message) {
     switch (message.command) {
         case 'QUnit.assertionFailed':
             failures.push(message.details);
+            //For now we just bail out early. Phantom has a problem continuing with the rest of the tests in some cases.
+            console.log('');
+            console.log('');
+            logFailure(message.details);
+            phantom.exit(1);
             break;
         case 'QUnit.testFailed':
             dot('0;31');
             break;
         case 'QUnit.testPassed':
             dot('0;32');
+            break;
+        case 'QUnit.moduleStart':
+            console.log('\n\n'+coloredText(message.details.name+':', '0;37'));
             break;
         case 'QUnit.done':
             done(message.result);
@@ -94,7 +111,7 @@ page.onCallback = function(message) {
 };
 
 page.onConsoleMessage = function(message) {
-//    console.log('LOG: '+message);
+    console.log('LOG: '+message);
 };
 
 function dot(color) {
@@ -103,9 +120,13 @@ function dot(color) {
         console.log('');
         dotLineSize = 0;
     }
-    fs.write("/dev/stdout", "\033["+color+"m.\033[0m", "w");
+    fs.write("/dev/stdout", coloredText('.', color), "w");
     dotLineSize++;
     totalDots++;
+}
+
+function coloredText(text, color) {
+    return "\033["+color+"m"+text+"\033[0m";
 }
 
 function done(result) {
@@ -116,26 +137,28 @@ function done(result) {
         console.log('\033[0;31mTests failed\033[0m');
         console.log('');
         console.log('---------------------------------------------------------------------------');
-        failures.forEach(function(details) {
-            console.log(details.module + ': ' + details.name);
-            if (typeof details.message == 'string') {
-                console.log(details.message);
-            }
-            if (details.actual || details.expected) {
-                console.log('Expected: '+JSON.stringify(details.expected));
-                console.log('Result: '+JSON.stringify(details.actual));
-            }
-            if (details.message && details.message.stack) {
-                console.log(details.message.stack);
-            } else {
-                console.log(details.source);
-            }
-//            console.log(JSON.stringify(details));
-            console.log('---------------------------------------------------------------------------');
-        }, this);
+        failures.forEach(logFailure);
     } else {
         console.log('\033[0;32mAll tests passed\033[0m');
         console.log('');
     }
     phantom.exit(result.failed ? 1 : 0);
+}
+
+function logFailure(details) {
+    console.log(details.module + ': ' + details.name);
+    if (typeof details.message == 'string') {
+        console.log(coloredText(details.message, '0;31'));
+    }
+    if (details.actual || details.expected) {
+        console.log('Expected: '+JSON.stringify(details.expected));
+        console.log('Result: '+JSON.stringify(details.actual));
+    }
+    if (details.message && details.message.stack) {
+        console.log(details.message.stack);
+    } else {
+        console.log(details.source);
+    }
+            console.log(JSON.stringify(details));
+    console.log('---------------------------------------------------------------------------');
 }
