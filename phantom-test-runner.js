@@ -1,4 +1,5 @@
 var fs = require('fs'),
+    system = require('system'),
     page = require('webpage').create(),
     url = 'http://localhost:4499/tests.html',
     failures = [],
@@ -113,7 +114,7 @@ page.onConsoleMessage = function(message) {
 };
 
 function dot(color) {
-    fs.write("/dev/stdout", coloredText('.', color), "w");
+    system.stdout.write(coloredText('.', color), "w");
 }
 
 function coloredText(text, color) {
