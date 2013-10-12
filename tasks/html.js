@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     grunt.registerTask('html', 'lol and build', function() {
         var c = config.getAll(grunt),
             versionPrefix = config.getVersionPrefix(grunt),
-            commonConfig = {ENV: {releaseDir: versionPrefix}};
+            commonConfig = {ENV: {releaseDir: '/'+versionPrefix}};
         
         writeHtml(grunt, 'index', {
             title: c.title,
