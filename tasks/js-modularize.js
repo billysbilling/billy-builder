@@ -33,14 +33,9 @@ function initModularizer(grunt) {
     var m = new Modularizer();
 
     requireDependencies(grunt, m);
-
-    addFiles(grunt, m, 'src/js');
-    addFiles(grunt, m, 'src/templates');
-
-    m.add('./src/js/index.js', {
-        entry: true
-    });
     
+    requireModule(grunt, m, '', true);
+
     m.add('./temp/svg.js', {
         expose: 'svg'
     });
@@ -54,21 +49,26 @@ function requireDependencies(grunt, m) {
     });
     
     grunt.file.expand(dependencyDirs).forEach(function(dir) {
-        var bower = getBowerConfig(grunt, dir),
-            bb = bower.config['billy-builder'];
-        
-        if (bb && bb.include) {
-            (bb.include instanceof Array ? bb.include : [bb.include]).forEach(function(include) {
-                addFiles(grunt, m, path.join(dir, include));
-            });
-        }
-        
-        if (bower.mainFile) {
-            m.add('./' + bower.mainFile, {
-                expose: path.basename(dir)
-            });
-        }
+        requireModule(grunt, m, dir, false);
     });
+}
+
+function requireModule(grunt, m, dir, mainIsEntry) {
+    var bower = getBowerConfig(grunt, dir),
+        bb = bower.config['billy-builder'];
+
+    if (bb && bb.include) {
+        (bb.include instanceof Array ? bb.include : [bb.include]).forEach(function(include) {
+            addFiles(grunt, m, path.join(dir, include));
+        });
+    }
+
+    if (bower.mainFile) {
+        m.add('./' + bower.mainFile, {
+            expose: path.basename(dir),
+            entry: mainIsEntry
+        });
+    }
 }
 
 function getBowerConfig(grunt, dir) {
