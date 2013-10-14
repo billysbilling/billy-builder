@@ -12,7 +12,7 @@ module.exports = function(grunt) {
     var versionPrefix = config.getVersionPrefix(grunt);
 
     var files = {};
-    files['dist/'+versionPrefix+'css/bundle.css'] = 'src/scss/bundle.scss';
+    files['dist/'+versionPrefix+'css/bundle.css'] = grunt.config.get('billy-builder.sass.sassFile');
     
     grunt.config.set('sass', {
         dist: {
