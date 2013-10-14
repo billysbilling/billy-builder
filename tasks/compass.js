@@ -3,7 +3,7 @@ var path = require('path'),
 
 module.exports = function(grunt) {
     if (grunt.config.get('compass')) {
-        grunt.fail.fatal('You can currently not set the `compass` config.');
+        grunt.fail.fatal('You can currently not set the `compass` config in your `Gruntfile.js`.');
         return;
     }
 
@@ -14,7 +14,7 @@ module.exports = function(grunt) {
     grunt.config.set('compass', {
         dist: {
             options: {
-                sassDir: 'src/scss/',
+                sassDir: grunt.config.get('billy-builder.compass.sassDir'),
                 cssDir: 'dist/'+versionPrefix+'css',
                 environment: process.env.NODE_ENV || 'development',
                 importPath: [path.resolve('./new-components')]
