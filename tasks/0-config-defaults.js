@@ -10,7 +10,7 @@ module.exports = function(grunt) {
         sass: false,
         
         title: 'Unnamed billy-builder app',
-        favicon: grunt.file.exists('src/images/favicon.ico') ? config.getVersionPrefix(grunt)+'images/favicon.ico' : null,
+        favicon: grunt.file.exists('src/images/favicon.ico') ? 'images/favicon.ico' : null,
         jsConfig: {},
         indexJsConfig: {},
         testsJsConfig: {

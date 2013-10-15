@@ -9,11 +9,12 @@ module.exports = function(grunt) {
     grunt.registerTask('html', 'lol and build', function() {
         var c = config.getAll(grunt),
             versionPrefix = config.getVersionPrefix(grunt),
-            commonConfig = {ENV: {releaseDir: '/'+versionPrefix}};
+            commonConfig = {ENV: {releaseDir: '/'+versionPrefix}},
+            favicon = c.favicon ? '/'+config.getVersionPrefix(grunt)+ c.favicon : null;
         
         writeHtml(grunt, 'index', {
             title: c.title,
-            favicon: c.favicon,
+            favicon: favicon,
             jsConfig: _.merge({}, commonConfig, c.jsConfig, c.indexJsConfig),
             cssUrls: [
                 '/'+versionPrefix+'css/bundle.css'
@@ -25,7 +26,7 @@ module.exports = function(grunt) {
         
         writeHtml(grunt, 'tests', {
             title: 'Tests: '+c.title,
-            favicon: c.favicon,
+            favicon: favicon,
             jsConfig: _.merge({}, commonConfig, c.jsConfig, c.testsJsConfig),
             cssUrls: [
                 '/'+versionPrefix+'vendor/qunit/qunit.css',
