@@ -2,8 +2,6 @@ doctype
 html
     head
         title=title
-        script.
-            !{jsConfig}
         if favicon
             link(rel="icon", href=favicon, type="image/x-icon")
             link(rel="shortcut icon", href=favicon, type="image/x-icon")
@@ -11,5 +9,7 @@ html
             link(rel="Stylesheet", type="text/css", href=url)
     body
         block content
+        script.
+            !{jsConfig}
         each url in jsUrls
             script(type="text/javascript", src=url)
