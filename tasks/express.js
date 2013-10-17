@@ -53,7 +53,7 @@ function htmlRouteFactory(file) {
                 waitForBuild(1, callback);
             },
             function(callback) {
-                res.set('Content-Type', 'text/html');
+                res.set('Content-Type', 'text/html; charset=utf-8');
                 res.send(fs.readFileSync(file));
                 callback();
             }
