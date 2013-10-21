@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     grunt.registerTask('test-runner', 'run run run', function() {
         var done = this.async();
         
-        var phantomjs = childProcess.spawn('phantomjs', [path.join(__dirname, '../phantom-test-runner.js')]);
+        var phantomjs = childProcess.spawn('phantomjs', [path.join(__dirname, '../phantom-test-runner.js'), 'http://localhost:'+(process.env.PORT || 4499)+'/tests.html']);
         phantomjs.stdout.pipe(process.stdout);
         phantomjs.stderr.pipe(process.stderr);
         phantomjs.on('error', function(err) {
