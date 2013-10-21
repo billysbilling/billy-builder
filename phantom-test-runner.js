@@ -1,7 +1,7 @@
 var fs = require('fs'),
     system = require('system'),
     page = require('webpage').create(),
-    url = 'http://localhost:4499/tests.html',
+    url = 'http://localhost:'+(process.env.PORT || 4499)+'/tests.html',
     failures = [],
     screenshotIndex = 0;
 
