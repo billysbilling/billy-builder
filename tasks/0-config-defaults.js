@@ -19,7 +19,9 @@ module.exports = function(grunt) {
             ENV: {
                 isTest: true
             }
-        }
+        },
+        extraCssUrls: [],
+        extraJsUrls: []
     };
     
     for (var k in defaults) {

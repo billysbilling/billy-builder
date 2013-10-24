@@ -18,10 +18,10 @@ module.exports = function(grunt) {
             jsConfig: _.merge({}, commonConfig, c.jsConfig, c.indexJsConfig),
             cssUrls: [
                 '/'+versionPrefix+'css/bundle.css'
-            ],
+            ].concat(c.extraJsUrls),
             jsUrls: [
                 '/'+versionPrefix+'js/bundle.js'
-            ]
+            ].concat(c.extraJsUrls)
         }, 'dist/index.html');
         
         writeHtml(grunt, 'tests', {
@@ -31,11 +31,11 @@ module.exports = function(grunt) {
             cssUrls: [
                 '/'+versionPrefix+'vendor/qunit/qunit.css',
                 '/'+versionPrefix+'css/bundle.css'
-            ],
+            ].concat(c.extraJsUrls),
             jsUrls: [
                 '/'+versionPrefix+'vendor/qunit/qunit.js',
                 '/'+versionPrefix+'js/tests-bundle.js'
-            ]
+            ].concat(c.extraJsUrls)
         }, 'dist/tests.html');
     });
 };
