@@ -2,6 +2,8 @@ var config = require('../config');
 
 module.exports = function(grunt) {
     var defaults = {
+        port: process.env.PORT || 4401,
+        
         version: 'default',
         
         dependencyDirs: ['bower_components'],

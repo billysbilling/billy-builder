@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     grunt.registerTask('express', 'serve and lol', function() {
         var done = this.async();
         
-        var app = createApp();
+        var app = createApp(grunt);
 
         startServer(app, function(err, app) {
             if (err) {
@@ -24,10 +24,10 @@ module.exports = function(grunt) {
     });
 };
 
-function createApp() {
+function createApp(grunt) {
     var app = express();
     
-    app.set('port', process.env.PORT || 4499);
+    app.set('port', grunt.config.get('billy-builder.port'));
     app.use(express.errorHandler());
 
     app.use('/tests.html', htmlRouteFactory('dist/tests.html'));
