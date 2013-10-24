@@ -20,6 +20,7 @@ way.
 
 ## Code TODO
 
+- The watch task should use the same logic as js-modularize.js and compass/sass to find the relevant file paths to watch.
 - Tests :whale2:
 - Maybe split a few things into their own modules (such as js-modularizer).
 - Toggle ember-testing container
