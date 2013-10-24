@@ -20,6 +20,8 @@ module.exports = function(grunt) {
             options: {
                 sassDir: grunt.config.get('billy-builder.compass.sassDir'),
                 cssDir: 'dist/'+versionPrefix+'css',
+                imagesDir: 'src/images',
+                httpImagesPath: '/'+config.getVersionPrefix(grunt)+'images',
                 environment: process.env.NODE_ENV || 'development',
                 importPath: importPaths
             }
