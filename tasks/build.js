@@ -1,3 +1,3 @@
 module.exports = function(grunt) {
-    grunt.registerTask('build', ['start-build', 'build-js', 'build-css', 'images', 'html', 'end-build']);
+    grunt.registerTask('build', ['start-build', 'build-js', 'build-css', 'images', 'fonts', 'html', 'end-build']);
 };
