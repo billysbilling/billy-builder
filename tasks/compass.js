@@ -9,8 +9,6 @@ module.exports = function(grunt) {
 
     grunt.loadTasks(path.join(__dirname, '../node_modules/grunt-contrib-compass/tasks'));
     
-    var versionPrefix = config.getVersionPrefix(grunt);
-    
     var importPaths = grunt.config.get('billy-builder.dependencyDirs').map(function(dir) {
         return path.resolve(dir);
     });
@@ -19,9 +17,9 @@ module.exports = function(grunt) {
         dist: {
             options: {
                 sassDir: grunt.config.get('billy-builder.compass.sassDir'),
-                cssDir: 'dist/'+versionPrefix+'css',
+                cssDir: 'dist/'+config.getVersionPrefix(grunt)+'css',
                 imagesDir: 'src/images',
-                httpImagesPath: '/'+config.getVersionPrefix(grunt)+'images',
+                httpImagesPath: config.getReleaseHttpPath(grunt)+'images',
                 environment: process.env.NODE_ENV || 'development',
                 importPath: importPaths
             }

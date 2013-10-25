@@ -5,6 +5,8 @@ module.exports = function(grunt) {
         port: process.env.PORT || 4401,
         
         version: 'default',
+
+        httpPath: '/',
         
         dependencyDirs: ['bower_components'],
         
