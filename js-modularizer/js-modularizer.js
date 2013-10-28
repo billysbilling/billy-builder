@@ -100,6 +100,10 @@ transforms['.js'] = function(contents) {
     return contents;
 };
 
+transforms['.json'] = function(contents) {
+    return 'module.exports = '+contents+';';
+};
+
 transforms['.hbs'] = transforms['.handlebars'] = function(contents) {
     return 'module.exports = Ember.Handlebars.compile('+JSON.stringify(contents)+');';
 };

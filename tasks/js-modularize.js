@@ -107,7 +107,7 @@ function getBowerConfig(grunt, dir) {
 }
 
 function addFiles(grunt, m, dir) {
-    grunt.file.expand([dir+'/**/*.js', dir+'/**/*.hbs']).forEach(function(file) {
+    grunt.file.expand([dir+'/**/*.js', dir+'/**/*.json', dir+'/**/*.hbs']).forEach(function(file) {
         m.add('./' + file);
     });
 }
