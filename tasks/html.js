@@ -11,10 +11,12 @@ module.exports = function(grunt) {
             releaseHttpPath = config.getReleaseHttpPath(grunt),
             commonConfig = {ENV: {releasePath: releaseHttpPath}},
             favicon = c.favicon ? releaseHttpPath + c.favicon : null,
-            preHeadHtml = c.preHeadHtml;
+            preHeadHtml = formatHeadHtml(grunt, c.preHeadHtml),
+            postHeadHtml = formatHeadHtml(grunt, c.postHeadHtml);
         
         writeHtml(grunt, 'index', {
-            preHeadHtml: c.preHeadHtml || '',
+            preHeadHtml: preHeadHtml,
+            postHeadHtml: postHeadHtml,
             title: c.title,
             favicon: favicon,
             jsConfig: _.merge({}, commonConfig, c.jsConfig, c.indexJsConfig),
@@ -23,12 +25,12 @@ module.exports = function(grunt) {
             ].concat(c.extraJsUrls),
             jsUrls: [
                 releaseHttpPath+'js/bundle.js'
-            ].concat(c.extraJsUrls),
-            postHeadHtml: c.postHeadHtml || ''
+            ].concat(c.extraJsUrls)
         }, 'dist/index.html');
         
         writeHtml(grunt, 'tests', {
-            preHeadHtml: c.preHeadHtml || '',
+            preHeadHtml: preHeadHtml,
+            postHeadHtml: postHeadHtml,
             title: 'Tests: '+c.title,
             favicon: favicon,
             jsConfig: _.merge({}, commonConfig, c.jsConfig, c.testsJsConfig),
@@ -39,8 +41,7 @@ module.exports = function(grunt) {
             jsUrls: [
                 releaseHttpPath+'vendor/qunit/qunit.js',
                 releaseHttpPath+'js/tests-bundle.js'
-            ].concat(c.extraJsUrls),
-            postHeadHtml: c.postHeadHtml || ''
+            ].concat(c.extraJsUrls)
         }, 'dist/tests.html');
     });
 };
@@ -68,4 +69,10 @@ function formatJsConfig(locals) {
     locals.jsConfig = _.reduce(jsConfig, function(result, obj, name) {
         return result + 'var '+name+'='+JSON.stringify(obj)+';';
     }, '');
+}
+
+function formatHeadHtml(grunt, html) {
+    html = html || '';
+    html = html.replace(/\{\{releaseHttpPath\}\}/g, config.getReleaseHttpPath(grunt));
+    return html;
 }
