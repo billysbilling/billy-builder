@@ -1,13 +1,15 @@
 doctype
 html
     head
-        meta(charset="utf-8") 
+        meta(charset="utf-8")
+        | !{preHeadHtml}
         title=title
         if favicon
             link(rel="icon", href=favicon, type="image/x-icon")
             link(rel="shortcut icon", href=favicon, type="image/x-icon")
         each url in cssUrls
             link(rel="Stylesheet", type="text/css", href=url)
+        | !{postHeadHtml}
     body
         block content
         script.

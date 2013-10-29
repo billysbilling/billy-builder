@@ -10,9 +10,11 @@ module.exports = function(grunt) {
         var c = config.getAll(grunt),
             releaseHttpPath = config.getReleaseHttpPath(grunt),
             commonConfig = {ENV: {releasePath: releaseHttpPath}},
-            favicon = c.favicon ? releaseHttpPath + c.favicon : null;
+            favicon = c.favicon ? releaseHttpPath + c.favicon : null,
+            preHeadHtml = c.preHeadHtml;
         
         writeHtml(grunt, 'index', {
+            preHeadHtml: c.preHeadHtml || '',
             title: c.title,
             favicon: favicon,
             jsConfig: _.merge({}, commonConfig, c.jsConfig, c.indexJsConfig),
@@ -21,10 +23,12 @@ module.exports = function(grunt) {
             ].concat(c.extraJsUrls),
             jsUrls: [
                 releaseHttpPath+'js/bundle.js'
-            ].concat(c.extraJsUrls)
+            ].concat(c.extraJsUrls),
+            postHeadHtml: c.postHeadHtml || ''
         }, 'dist/index.html');
         
         writeHtml(grunt, 'tests', {
+            preHeadHtml: c.preHeadHtml || '',
             title: 'Tests: '+c.title,
             favicon: favicon,
             jsConfig: _.merge({}, commonConfig, c.jsConfig, c.testsJsConfig),
@@ -35,7 +39,8 @@ module.exports = function(grunt) {
             jsUrls: [
                 releaseHttpPath+'vendor/qunit/qunit.js',
                 releaseHttpPath+'js/tests-bundle.js'
-            ].concat(c.extraJsUrls)
+            ].concat(c.extraJsUrls),
+            postHeadHtml: c.postHeadHtml || ''
         }, 'dist/tests.html');
     });
 };
