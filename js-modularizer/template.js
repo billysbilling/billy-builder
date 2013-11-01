@@ -43,12 +43,18 @@ var require = (function(moduleDefinitions, exposes, entries) {
     
     var relativeRequireFactory = function(requirerName) {
         var requirerDir = requirerName.replace(/\/[^\/]*$/, '');
-        return function(moduleName, allowNotFound) {
+        var resolve = function(moduleName) {
             if (moduleName.substring(0, 2) === './' || moduleName.substring(0, 3) === '../') {
                 moduleName = canonicalizePath(requirerDir + '/' + moduleName);
             }
+            return moduleName;
+        };
+        var relativeRequire = function(moduleName, allowNotFound) {
+            moduleName = resolve(moduleName);
             return require(moduleName, allowNotFound);
         };
+        relativeRequire.resolve = resolve;
+        return relativeRequire;
     };
 
     var canonicalizePath = function(path) {
