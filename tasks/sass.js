@@ -8,6 +8,10 @@ module.exports = function(grunt) {
     }
 
     grunt.loadTasks(path.join(__dirname, '../node_modules/grunt-sass/tasks'));
+
+    var includePaths = grunt.config.get('billy-builder.dependencyDirs').map(function(dir) {
+        return path.resolve(dir);
+    });
     
     var versionPrefix = config.getVersionPrefix(grunt);
 
@@ -16,6 +20,9 @@ module.exports = function(grunt) {
     
     grunt.config.set('sass', {
         dist: {
+            options: {
+                includePaths: includePaths
+            },
             files: files
         }
     });
