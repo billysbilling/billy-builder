@@ -76,10 +76,11 @@ var require = (function(moduleDefinitions, exposes, entries) {
         }
         return canonicalized.join('/');
     };
-    for (var k in entries) {
-        if (entries.hasOwnProperty(k)) {
-            require(entries[k]);
-        }
+    
+    var i,
+        length = entries.length;
+    for (i = 0; i < length; i++) {
+        require(entries[i]);
     }
     
     return require;
