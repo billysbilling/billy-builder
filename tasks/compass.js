@@ -8,8 +8,9 @@ module.exports = function(grunt) {
     }
 
     grunt.loadTasks(path.join(__dirname, '../node_modules/grunt-contrib-compass/tasks'));
-    
-    var importPaths = grunt.config.get('billy-builder.dependencyDirs').map(function(dir) {
+
+    var dependencyDirs = ['bower_components'].concat(grunt.config.get('billy-builder.extraDependencyDirs'));
+    var importPaths = dependencyDirs.map(function(dir) {
         return path.resolve(dir);
     });
     

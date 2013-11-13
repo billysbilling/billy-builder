@@ -9,7 +9,8 @@ module.exports = function(grunt) {
 
     grunt.loadTasks(path.join(__dirname, '../node_modules/grunt-sass/tasks'));
 
-    var includePaths = grunt.config.get('billy-builder.dependencyDirs').map(function(dir) {
+    var dependencyDirs = ['bower_components'].concat(grunt.config.get('billy-builder.extraDependencyDirs'));
+    var includePaths = dependencyDirs.map(function(dir) {
         return path.resolve(dir);
     });
     

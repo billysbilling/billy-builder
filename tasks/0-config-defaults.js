@@ -7,8 +7,8 @@ module.exports = function(grunt) {
         version: 'default',
 
         httpPath: '/',
-        
-        dependencyDirs: ['bower_components'],
+
+        extraDependencyDirs: [],
         
         compass: false,
         sass: false,

@@ -166,16 +166,16 @@ This is useful when building production builds to avoid caching issues, and to e
 served (in case a user requests the page while only the new css file has been upload for instance). Just make sure to
 upload `index.html` last, i.e. after all js, css and images have been uploaded.
 
-#### dependencyDirs
+#### extraDependencyDirs
 
 Type: `Array`  
-Default: `['bower_components']`
+Default: `[]`
 
 Tells billy-builder which directories to look for Bower components in.
 
 Usage example: Say you have a bunch of to-become-bower-components that you haven't moved out of your main repo yet.
 Then you can place them all in a directory e.g. named `new_components` and version control them, and set
-`dependencyDirs` to `['bower_components', 'new_components']`. Eventually you should split them into their own repos
+`extraDependencyDirs` to `['new_components']`. Eventually you should split them into their own repos
 though.
 
 #### sass

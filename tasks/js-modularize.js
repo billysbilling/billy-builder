@@ -1,4 +1,5 @@
-var path = require('path'),
+var _ = require('lodash'),
+    path = require('path'),
     async = require('async'),
     Modularizer = require('../js-modularizer/js-modularizer'),
     config = require('../config');
@@ -10,11 +11,11 @@ module.exports = function(grunt) {
         
         async.series([
             function(callback) {
-                var m = initModularizer(grunt);
+                var m = initModularizer(grunt, false);
                 bundle(grunt, m, './dist/'+versionPrefix+'js/bundle.js', callback);
             },
             function(callback) {
-                var m = initModularizer(grunt);
+                var m = initModularizer(grunt, true);
 
                 if (grunt.file.isDir('tests')) {
                     grunt.file.recurse('tests', function(abspath) {
@@ -28,32 +29,54 @@ module.exports = function(grunt) {
     });
 };
 
+function initModularizer(grunt, includeDev) {
+    var m = new Modularizer(),
+        includedModules = {};
 
-function initModularizer(grunt) {
-    var m = new Modularizer();
-
-    requireDependencies(grunt, m);
-    
-    requireModule(grunt, m, '', true);
+    requireModule(grunt, m, includedModules, '', true);
 
     m.add('./temp/svg.js', {
         expose: 'svg'
     });
+
+    requireExtraDependencies(grunt, includedModules, m);
+
+    if (includeDev) {
+        requireBowerDependencies(grunt, m, includedModules, '', 'devDependencies');
+    }
     
     return m;
 }
 
-function requireDependencies(grunt, m) {
-    var dependencyDirs = grunt.config.get('billy-builder.dependencyDirs').map(function(dir) {
+function requireBowerDependencies(grunt, m, includedModules, dir, dependenciesKey) {
+    var config = getBowerConfig(grunt, dir).config,
+        dependencies = config[dependenciesKey];
+
+    if (dependencies) {
+        _.each(dependencies, function(version, dependency) {
+            requireModule(grunt, m, includedModules, 'bower_components/'+dependency, false);
+        });
+    }
+}
+
+function requireExtraDependencies(grunt, includedModules, m) {
+    var extraDependencyDirs = grunt.config.get('billy-builder.extraDependencyDirs').map(function(dir) {
         return dir + '/*';
     });
-    
-    grunt.file.expand(dependencyDirs).forEach(function(dir) {
-        requireModule(grunt, m, dir, false);
+
+    grunt.file.expand(extraDependencyDirs).forEach(function(dir) {
+        requireModule(grunt, m, includedModules, dir, false);
     });
 }
 
-function requireModule(grunt, m, dir, mainIsEntry) {
+function requireModule(grunt, m, includedModules, dir, mainIsEntry) {
+    if (includedModules[dir]) {
+        return;
+    }
+    includedModules[dir] = true;
+
+    requireBowerDependencies(grunt, m, includedModules, dir, 'dependencies');
+
     var bower = getBowerConfig(grunt, dir),
         bb = bower.config['billy-builder'];
 

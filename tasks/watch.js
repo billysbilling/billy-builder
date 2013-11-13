@@ -18,8 +18,9 @@ module.exports = function(grunt) {
     var cssFiles = [
         'src/**/*.scss'
     ];
-    
-    grunt.config.get('billy-builder.dependencyDirs').forEach(function(dir) {
+
+    var dependencyDirs = ['bower_components'].concat(grunt.config.get('billy-builder.extraDependencyDirs'));
+    dependencyDirs.forEach(function(dir) {
         jsFiles.push(dir+'/**/*.js');
         jsFiles.push(dir+'/**/*.hbs');
         jsFiles.push(dir+'/**/*.svg');
