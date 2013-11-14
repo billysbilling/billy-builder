@@ -22,6 +22,7 @@ module.exports = function(grunt) {
     var dependencyDirs = ['bower_components'].concat(grunt.config.get('billy-builder.extraDependencyDirs'));
     dependencyDirs.forEach(function(dir) {
         jsFiles.push(dir+'/**/*.js');
+        jsFiles.push(dir+'/**/*.json');
         jsFiles.push(dir+'/**/*.hbs');
         jsFiles.push(dir+'/**/*.svg');
 
