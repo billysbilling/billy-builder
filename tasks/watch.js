@@ -34,7 +34,8 @@ module.exports = function(grunt) {
             options: {
                 atBegin: true,
                 interrupt: true,
-                spawn: false
+                spawn: false,
+                interval: 500
             },
             files: [
                 //Don't really watch
@@ -44,7 +45,8 @@ module.exports = function(grunt) {
         js: {
             options: {
                 interrupt: true,
-                spawn: false
+                spawn: false,
+                interval: 500
             },
             files: jsFiles,
             tasks: ['start-build', 'build-js', 'end-build']
@@ -52,7 +54,8 @@ module.exports = function(grunt) {
         css: {
             options: {
                 interrupt: true,
-                spawn: false
+                spawn: false,
+                interval: 500
             },
             files: cssFiles,
             tasks: ['start-build', 'build-css', 'end-build']
