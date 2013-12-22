@@ -22,7 +22,7 @@ module.exports = function(grunt) {
             jsConfig: _.merge({}, commonConfig, c.jsConfig, c.indexJsConfig),
             cssUrls: [
                 releaseHttpPath+'css/bundle.css'
-            ].concat(c.extraJsUrls),
+            ].concat(c.extraCssUrls),
             jsUrls: [
                 releaseHttpPath+'js/bundle.js'
             ].concat(c.extraJsUrls)
