@@ -4,8 +4,18 @@ var childProcess = require('child_process'),
 module.exports = function(grunt) {
     grunt.registerTask('test-runner', 'run run run', function() {
         var done = this.async();
+
+        var testNumber = grunt.option('testNumber'),
+            module = grunt.option('module'),
+            url = 'http://localhost:'+grunt.config.get('billy-builder.port')+'/tests.html?';
+        if (testNumber) {
+            url += 'testNumber='+testNumber+'&';
+        }
+        if (module) {
+            url += 'module='+encodeURIComponent(module)+'&';
+        }
         
-        var phantomjs = childProcess.spawn('phantomjs', [path.join(__dirname, '../phantom-test-runner.js'), 'http://localhost:'+grunt.config.get('billy-builder.port')+'/tests.html']);
+        var phantomjs = childProcess.spawn('phantomjs', [path.join(__dirname, '../phantom-test-runner.js'), url]);
         phantomjs.stdout.pipe(process.stdout);
         phantomjs.stderr.pipe(process.stderr);
         phantomjs.on('error', function(err) {
