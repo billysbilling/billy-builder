@@ -95,25 +95,62 @@ function requireModule(grunt, m, includedModules, dir, mainIsEntry) {
 }
 
 function getBowerConfig(grunt, dir) {
-    var bowerConfig;
+    var bowerJson,
+        bowerConfig;
 
-    try {
-        bowerConfig = JSON.parse(grunt.file.read(path.join(dir, 'bower.json')));
-    } catch (e) {
-        grunt.fail.fatal('Could not read bower.json from '+dir+': '+e.message);
+    if (grunt.file.exists(dir, 'bower.json')) {
+        bowerJson = grunt.file.read(path.join(dir, 'bower.json'));
+    } else if (grunt.file.exists(dir, '.bower.json')) {
+        bowerJson = grunt.file.read(path.join(dir, '.bower.json'));
+    } else {
+        grunt.fail.fatal('Could not find bower.json or .bower.json in '+dir+'.');
         return;
     }
 
+    try {
+        bowerConfig = JSON.parse(bowerJson);
+    } catch (e) {
+        grunt.fail.fatal('Could not parse bower.json from '+dir+': '+e.message);
+        return;
+    }
+
+    return {
+        config: bowerConfig,
+        mainFile: resolveMainFile(grunt, bowerConfig, dir)
+    };
+}
+
+function resolveMainFile(grunt, bowerConfig, dir) {
     var main = bowerConfig.main,
         mainFile = null;
     if (main) {
         if (main instanceof Array) {
+            main = _.filter(main, function(val) { return val.match(/\.js$/); });
+
+            if (main.length > 1) {
+                grunt.fail.warn('Multiple main js files exist for package \'' + bowerConfig.name + '\'. Using \'' + main[0] + '\' (this may not be intended)');
+            } else if (!main.length) {
+                grunt.fail.warn('Mainfile(s) were specified for \'' + bowerConfig.name + '\', but none of them were .js files.');
+                return null;
+            }
             main = main[0];
         }
-        mainFile = path.join(dir, main || '');
-    
-        if (!grunt.file.exists(mainFile)) {
-            grunt.fail.fatal('Main bower file '+mainFile+' does not exist.');
+
+        var attempts = [
+            main || '',
+            bowerConfig.name + '.js',
+            'index.js'
+        ];
+        _.each(attempts, function(attempt) {
+            if (grunt.file.exists(dir, attempt)) {
+                mainFile = path.join(dir, attempt);
+                return false;
+            }
+        });
+
+        if (!mainFile) {
+            grunt.fail.warn('Main bower file not found for package \'' + bowerConfig.name + '\'.');
+            return null;
         }
 
         if (process.env.NODE_ENV === 'production') {
@@ -123,10 +160,7 @@ function getBowerConfig(grunt, dir) {
             }
         }
     }
-    return {
-        config: bowerConfig,
-        mainFile: mainFile
-    };
+    return mainFile;
 }
 
 function addFiles(grunt, m, dir) {
