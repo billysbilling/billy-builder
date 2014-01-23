@@ -79,11 +79,6 @@ page.onCallback = function(message) {
     switch (message.command) {
         case 'QUnit.assertionFailed':
             failures.push(message.details);
-            //For now we just bail out early. Phantom has a problem continuing with the rest of the tests in some cases.
-            console.log('');
-            console.log('');
-            logFailure(message.details);
-            phantom.exit(1);
             break;
         case 'QUnit.testFailed':
             dot('0;31');
