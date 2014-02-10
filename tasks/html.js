@@ -11,8 +11,9 @@ module.exports = function(grunt) {
             releaseHttpPath = config.getReleaseHttpPath(grunt),
             commonConfig = {ENV: {releasePath: releaseHttpPath}},
             favicon = c.favicon ? releaseHttpPath + c.favicon : null,
-            preHeadHtml = formatHeadHtml(grunt, c.preHeadHtml),
-            postHeadHtml = formatHeadHtml(grunt, c.postHeadHtml);
+            preHeadHtml = formatHtml(grunt, c.preHeadHtml),
+            postHeadHtml = formatHtml(grunt, c.postHeadHtml),
+            bodyHtml = formatHtml(grunt, c.bodyHtml);
         
         writeHtml(grunt, 'index', {
             preHeadHtml: preHeadHtml,
@@ -25,7 +26,8 @@ module.exports = function(grunt) {
             ].concat(c.extraCssUrls),
             jsUrls: [
                 releaseHttpPath+'js/bundle.js'
-            ].concat(c.extraJsUrls)
+            ].concat(c.extraJsUrls),
+            bodyHtml: bodyHtml
         }, 'dist/index.html');
         
         writeHtml(grunt, 'tests', {
@@ -41,7 +43,8 @@ module.exports = function(grunt) {
             jsUrls: [
                 releaseHttpPath+'vendor/qunit/qunit.js',
                 releaseHttpPath+'js/tests-bundle.js'
-            ].concat(c.extraJsUrls)
+            ].concat(c.extraJsUrls),
+            bodyHtml: bodyHtml
         }, 'dist/tests.html');
     });
 };
@@ -71,7 +74,7 @@ function formatJsConfig(locals) {
     }, '');
 }
 
-function formatHeadHtml(grunt, html) {
+function formatHtml(grunt, html) {
     html = html || '';
     html = html.replace(/\{\{releaseHttpPath\}\}/g, config.getReleaseHttpPath(grunt));
     return html;

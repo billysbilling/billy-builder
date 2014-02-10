@@ -12,6 +12,7 @@ html
         | !{postHeadHtml}
     body
         block content
+        | !{bodyHtml}
         script.
             !{jsConfig}
         each url in jsUrls
