@@ -7,13 +7,13 @@ module.exports = function(grunt) {
         return;
     }
 
-    grunt.loadTasks(path.join(__dirname, '../node_modules/grunt-contrib-compass/tasks'));
+    grunt.loadNpmTasks('grunt-contrib-compass');
 
     var dependencyDirs = ['bower_components'].concat(grunt.config.get('billy-builder.extraDependencyDirs'));
     var importPaths = dependencyDirs.map(function(dir) {
         return path.resolve(dir);
     });
-    
+
     grunt.config.set('compass', {
         dist: {
             options: {

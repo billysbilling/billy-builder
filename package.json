@@ -19,9 +19,5 @@
     "lodash": "~2.2.1",
     "connect-livereload": "~0.3.0",
     "grunt-contrib-jshint": "~0.7.1"
-  },
-  "optionalDependencies": {
-    "grunt-sass": "~0.6.1",
-    "grunt-contrib-compass": "~0.6.0"
   }
 }

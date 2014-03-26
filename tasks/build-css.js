@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
     var tasks = [];
-    
+
     if (grunt.config.get('billy-builder.sass')) {
         tasks.push('sass');
     }
