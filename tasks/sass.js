@@ -7,18 +7,18 @@ module.exports = function(grunt) {
         return;
     }
 
-    grunt.loadTasks(path.join(__dirname, '../node_modules/grunt-sass/tasks'));
+    grunt.loadNpmTasks('grunt-sass');
 
     var dependencyDirs = ['bower_components'].concat(grunt.config.get('billy-builder.extraDependencyDirs'));
     var includePaths = dependencyDirs.map(function(dir) {
         return path.resolve(dir);
     });
-    
+
     var versionPrefix = config.getVersionPrefix(grunt);
 
     var files = {};
     files['dist/'+versionPrefix+'css/bundle.css'] = grunt.config.get('billy-builder.sass.sassFile');
-    
+
     grunt.config.set('sass', {
         dist: {
             options: {
