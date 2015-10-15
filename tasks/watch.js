@@ -6,15 +6,15 @@ module.exports = function(grunt) {
         return;
     }
 
-    grunt.loadTasks(path.join(__dirname, '../node_modules/grunt-contrib-watch/tasks'));
-    
+    grunt.loadNpmTasks('grunt-contrib-watch');
+
     var jsFiles = [
         'src/**/*.js',
         'src/**/*.hbs',
         'src/**/*.svg',
         'tests/**/*.js'
     ];
-    
+
     var cssFiles = [
         'src/**/*.scss'
     ];
@@ -28,7 +28,7 @@ module.exports = function(grunt) {
 
         cssFiles.push(dir+'/**/*.scss');
     });
-    
+
     grunt.config.set('watch', {
         all: {
             options: {

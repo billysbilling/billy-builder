@@ -7,8 +7,8 @@ module.exports = function(grunt) {
         return;
     }
 
-    grunt.loadTasks(path.join(__dirname, '../node_modules/grunt-contrib-jshint/tasks'));
-    
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+
     if (grunt.option('jshint') !== 0) {
         grunt.config.set('jshint', {
             options: grunt.config.get('billy-builder.jshint'),

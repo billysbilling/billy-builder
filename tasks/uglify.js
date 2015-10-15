@@ -6,14 +6,14 @@ module.exports = function(grunt) {
         grunt.fail.fatal('You can currently not set the `uglify` config.');
         return;
     }
-    
-    grunt.loadTasks(path.join(__dirname, '../node_modules/grunt-contrib-uglify/tasks'));
+
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
     var versionPrefix = config.getVersionPrefix(grunt);
-    
+
     var files = {};
     files['dist/'+versionPrefix+'js/bundle.js'] = 'dist/'+versionPrefix+'js/bundle.js';
-    
+
     grunt.config.set('uglify', {
         options: {
             compress: false
