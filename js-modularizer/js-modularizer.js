@@ -17,7 +17,7 @@ Modularizer.prototype.add = function(file, opts) {
 
 Modularizer.prototype.bundle = function(callback) {
     var self = this;
-    
+
     async.waterfall([
         function(callback) {
             self._buildFileContents(callback);
@@ -37,12 +37,13 @@ Modularizer.prototype._pushFileContents = function(contents, file, callback) {
         if (err) return callback(err);
 
         fileContents = fileContents.toString();
-        
+
         var extension = path.extname(file),
             transform = transforms[extension];
-        fileContents = transform(fileContents);
-        
-        contents.push('\''+toName(file)+'\': function(module, exports, require) {\n'+fileContents+'\n}')
+        if (typeof transform === 'function') {
+            fileContents = transform(fileContents);
+            contents.push('\''+toName(file)+'\': function(module, exports, require) {\n'+fileContents+'\n}');
+        }
         callback(null, contents);
     });
 };
@@ -83,7 +84,7 @@ Modularizer.prototype._compile = function(contents, exposes, entries, callback) 
         s = s[1].split('//{{entries}}', 2);
         template[2] = s[0];
         template[3] = s[1];
-        
+
         var compiled = template[0] + contents.join(',\n') + template[1] + exposes.join(',\n') + template[2] + entries.join(',\n') + template[3];
         callback(null, compiled);
     });
