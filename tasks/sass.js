@@ -21,9 +21,12 @@ module.exports = function(grunt) {
 
     grunt.config.set('sass', {
         dist: {
-            options: {
-                includePaths: includePaths
-            },
+            options: grunt.util._.merge(
+                grunt.config.get('billy-builder.sass.options'),
+                {
+                    includePaths: includePaths
+                }
+            ),
             files: files
         }
     });
